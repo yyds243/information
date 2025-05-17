@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.EventMapper">
+
+    <select id="selectAll" resultType="com.example.entity.Event">
+        select event.*, type.name as typeName, host.name as hostName from `event`
+        left join type on event.type_id = type.id
+        left join host on event.host_id = host.id
+        <where>
+            <if test="typeId != null"> and event.type_id = #{typeId}</if>
+            <if test="hostId != null"> and event.host_id = #{hostId}</if>
+            <if test="name != null"> and event.name like concat('%', #{name}, '%')</if>
+        </where>
+        order by event.id desc
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.Event">
+        select event.*, type.name as typeName, host.name as hostName from `event`
+          left join type on event.type_id = type.id
+          left join host on event.host_id = host.id
+        where event.id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from `event`
+        where id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.Event" useGeneratedKeys="true" keyProperty="id">
+        insert into `event`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="description != null">description,</if>
+            <if test="content != null">content,</if>
+            <if test="typeId != null">type_id,</if>
+            <if test="start != null">start,</if>
+            <if test="end != null">end,</if>
+            <if test="img != null">img,</if>
+            <if test="hostId != null">host_id,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="description != null">#{description},</if>
+            <if test="content != null">#{content},</if>
+            <if test="typeId != null">#{typeId},</if>
+            <if test="start != null">#{start},</if>
+            <if test="end != null">#{end},</if>
+            <if test="img != null">#{img},</if>
+            <if test="hostId != null">#{hostId},</if>
+            <if test="status != null">#{status},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Event">
+        update `event`
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+            <if test="typeId != null">
+                type_id = #{typeId},
+            </if>
+            <if test="start != null">
+                start = #{start},
+            </if>
+            <if test="end != null">
+                end = #{end},
+            </if>
+            <if test="img != null">
+                img = #{img},
+            </if>
+            <if test="hostId != null">
+                host_id = #{hostId},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+        </set>
+        where id = #{id} 
+    </update>
+
+</mapper>

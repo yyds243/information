@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.SignMapper">
+
+    <select id="selectAll" resultType="com.example.entity.Sign">
+        select sign.*, event.name as eventName, user.name as userName from `sign`
+        left join event on sign.event_id = event.id
+        left join user on sign.user_id = user.id
+        <where>
+            <if test="eventId != null"> and sign.event_id = #{eventId}</if>
+            <if test="userId != null"> and sign.user_id = #{userId}</if>
+            <if test="userName != null"> and user.name = #{userName}</if>
+            <if test="eventName != null"> and event.name = #{eventName}</if>
+            <if test="hostId != null"> and sign.host_id = #{hostId}</if>
+        </where>
+        order by sign.id desc
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.Sign">
+        select * from `sign`
+        where id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from `sign`
+        where id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.Sign" useGeneratedKeys="true" keyProperty="id">
+        insert into `sign`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="eventId != null">event_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="phone != null">phone,</if>
+            <if test="certificate != null">certificate,</if>
+            <if test="status != null">status,</if>
+            <if test="reason != null">reason,</if>
+            <if test="time != null">time,</if>
+            <if test="hostId != null">host_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="eventId != null">#{eventId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="certificate != null">#{certificate},</if>
+            <if test="status != null">#{status},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="time != null">#{time},</if>
+            <if test="hostId != null">#{hostId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Sign">
+        update `sign`
+        <set>
+            <if test="eventId != null">
+                event_id = #{eventId},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="certificate != null">
+                certificate = #{certificate},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="reason != null">
+                reason = #{reason},
+            </if>
+            <if test="time != null">
+                time = #{time},
+            </if>
+            <if test="hostId != null">
+                host_id = #{hostId},
+            </if>
+        </set>
+        where id = #{id} 
+    </update>
+
+</mapper>

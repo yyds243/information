@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.EventResultMapper">
+
+    <select id="selectAll" resultType="com.example.entity.EventResult">
+        select event_result.*, event.name as eventName, award.name as awardName, user.name as userName, host.name as hostName
+        from `event_result`
+        left join event on event_result.event_id = event.id
+        left join user on event_result.user_id = user.id
+        left join award on event_result.award_id = award.id
+        left join host on event_result.host_id = host.id
+        <where>
+            <if test="eventId != null"> and event_result.event_id = #{eventId}</if>
+            <if test="userId != null"> and event_result.user_id = #{userId}</if>
+            <if test="eventName != null"> and event.name = #{eventName}</if>
+            <if test="userName != null"> and user.name = #{userName}</if>
+        </where>
+        order by event_result.id desc
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.EventResult">
+        select * from `event_result`
+        where id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from `event_result`
+        where id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.EventResult" useGeneratedKeys="true" keyProperty="id">
+        insert into `event_result`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="eventId != null">event_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="awardId != null">award_id,</if>
+            <if test="date != null">date,</if>
+            <if test="address != null">address,</if>
+            <if test="phone != null">phone,</if>
+            <if test="status != null">status,</if>
+            <if test="hostId != null">host_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="eventId != null">#{eventId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="awardId != null">#{awardId},</if>
+            <if test="date != null">#{date},</if>
+            <if test="address != null">#{address},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="status != null">#{status},</if>
+            <if test="hostId != null">#{hostId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.EventResult">
+        update `event_result`
+        <set>
+            <if test="eventId != null">
+                event_id = #{eventId},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="awardId != null">
+                award_id = #{awardId},
+            </if>
+            <if test="date != null">
+                date = #{date},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="hostId != null">
+                host_id = #{hostId},
+            </if>
+        </set>
+        where id = #{id} 
+    </update>
+
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.CarouselMapper">
+
+    <select id="selectAll" resultType="com.example.entity.Carousel">
+        select carousel.*, event.name as eventName from `carousel`
+        left join event on carousel.event_id = event.id
+        <where>
+            <if test="eventName != null"> and event.name = #{eventName}</if>
+        </where>
+        order by carousel.id desc
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.Carousel">
+        select * from `carousel`
+        where id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from `carousel`
+        where id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.Carousel" useGeneratedKeys="true" keyProperty="id">
+        insert into `carousel`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="eventId != null">event_id,</if>
+            <if test="img != null">img,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="eventId != null">#{eventId},</if>
+            <if test="img != null">#{img},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Carousel">
+        update `carousel`
+        <set>
+            <if test="eventId != null">
+                event_id = #{eventId},
+            </if>
+            <if test="img != null">
+                img = #{img},
+            </if>
+        </set>
+        where id = #{id} 
+    </update>
+
+</mapper>
